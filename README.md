@@ -10,4 +10,4 @@
 
 
 ## Variables:
-* `promtail_exporter_version` (type=string, default="0.47.2") - Версия promtail
+* `promtail_exporter_version` (type=string, default="2.9.4") - Версия promtail
