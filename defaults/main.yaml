@@ -1,0 +1,22 @@
+---
+
+# General
+
+promtail_work_dir: "/tmp"
+promtail_os_platform: linux-amd64
+
+# Promtail
+promtail_name: promtail
+promtail_exporter_version: "2.9.4"
+
+promtail_config_file_name: config.yaml
+promtail_config_folder: /etc/{{ promtail_name }}
+promtail_config_path: "{{ promtail_config_folder }}/{{ promtail_config_file_name }}"
+promtail_unit_name: "{{ promtail_name }}.service"
+promtail_systemd_unit_file: /etc/systemd/system/{{ promtail_unit_name }}
+promtail_install_path: /usr/local/bin/{{ promtail_name }}
+promtail_archive_name: "{{ promtail_name }}-{{ promtail_os_platform }}.zip"
+
+# URLs
+promtail_url: "https://github.com/grafana/loki/releases/download/v{{ promtail_exporter_version }}/{{ promtail_archive_name }}"
+promtail_git_repo_URL: "https://{{ gitlab_username }}:{{ gitlab_token }}@{{ gitlab_domain }}/{{ gitlab_repo_group }}/{{ gitlab_repo_name }}.git"

@@ -1,0 +1,47 @@
+---
+
+- name: PROMTAIL | INSTALL | Create directory
+  ansible.builtin.file:
+    path: "{{ item.path }}"
+    state: "{{ item.state }}"
+    owner: "{{ item.owner }}"
+    group: "{{ item.group }}"
+    mode: "{{ item.mode }}"
+  with_items: "{{ promtail_create_folders }}"
+
+- name: PROMTAIL | INSTALL | Create User PROMTAIL
+  ansible.builtin.user:
+    name: promtail
+    system: true
+    create_home: false
+    comment: "Exporter system user promtail"
+    append: yes
+    groups: adm,systemd-journal
+
+- name: PROMTAIL | INSTALL | Download
+  ansible.builtin.unarchive:
+    src: "{{ promtail_url }}"
+    dest: "{{ promtail_work_dir }}"
+    remote_src: true
+
+- name: PROMTAIL | INSTALL | Copy file
+  ansible.builtin.copy:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    owner: "{{ item.owner }}"
+    group: "{{ item.group }}"
+    mode: "{{ item.mode }}"
+    remote_src: "{{ item.remote_src }}"
+  with_items: "{{ promtail_copy_files }}"
+  notify: Restart Promtail
+
+- name: PROMTAIL | INSTALL | Start service promtail
+  ansible.builtin.systemd:
+    name: promtail
+    enabled: true
+    state: started
+
+- name: PROMTAIL | INSTALL | Status service promtail
+  ansible.builtin.systemd:
+    name: promtail
+    state: started

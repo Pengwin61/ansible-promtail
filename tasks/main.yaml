@@ -1,0 +1,27 @@
+---
+
+- name: PROMTAIL | INSTALL | Clone a gitlab repository
+  ansible.builtin.git:
+    repo: "{{ promtail_git_repo_URL }}"
+    dest: "{{ promtail_work_dir }}/{{ promtail_name }}"
+
+- name: PROMTAIL | Promtail | CHECK
+  ansible.builtin.import_tasks: check.yaml
+  tags:
+    - promtail
+
+- name: PROMTAIL | Promtail | Config not found
+  when: promtail_check_config.stat.exists == false
+  ansible.builtin.debug:
+    msg: "Config not found on host:'{{ inventory_hostname }}'"
+
+- name: PROMTAIL | Promtail | INSTALL
+  when: promtail_check_config.stat.exists == true
+  ansible.builtin.import_tasks: install.yaml
+  tags:
+    - promtail
+
+- name: PROMTAIL | Promtail | CLEANUP
+  ansible.builtin.import_tasks: cleanup.yaml
+  tags:
+    - cleanup

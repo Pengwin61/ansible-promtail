@@ -1,0 +1,7 @@
+---
+
+- name: PROMTAIL | CLEANUP | Delete directory
+  ansible.builtin.file:
+    path: "{{ item.path }}"
+    state: "{{ item.state }}"
+  with_items: "{{ promtail_cleanup_files }}"

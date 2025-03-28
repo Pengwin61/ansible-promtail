@@ -1,0 +1,6 @@
+---
+
+- name: PROMTAIL | CHECK | Configs files
+  ansible.builtin.stat:
+    path: "{{ promtail_work_dir }}/{{ promtail_name }}/config/{{ promtail_name }}/{{ inventory_hostname }}.yaml"
+  register: promtail_check_config

@@ -1,0 +1,48 @@
+---
+
+# Gitlab
+gitlab_domain: "gitlab.example.com"
+gitlab_repo_name: grafana-loki
+gitlab_repo_group: infrastructure
+gitlab_username: ""
+gitlab_token: ""
+
+
+promtail_create_folders:
+  - path: '{{ promtail_config_folder }}'
+    owner: root
+    group: root
+    mode: "0755"
+    state: "directory"
+  - path: '/logs'
+    owner: root
+    group: root
+    mode: "0644"
+    state: "directory"
+
+promtail_copy_files:
+  - src: '{{ promtail_work_dir }}/promtail/config/promtail/{{ inventory_hostname }}.yaml'
+    dest: '{{ promtail_config_path }}'
+    owner: promtail
+    group: promtail
+    mode: "0660"
+    remote_src: true
+  - src: '{{ promtail_work_dir }}/promtail-{{ promtail_os_platform }}'
+    dest: '{{ promtail_install_path}}'
+    owner: root
+    group: root
+    mode: "0755"
+    remote_src: true
+  - src: '{{ promtail_unit_name }}'
+    dest: '{{ promtail_systemd_unit_file }}'
+    owner: root
+    group: root
+    mode: "0644"
+    remote_src: false
+
+promtail_cleanup_files:
+  - path: '{{ promtail_work_dir }}/promtail'
+    state: absent
+
+
+
